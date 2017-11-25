@@ -61,33 +61,34 @@ plt.figure(figsize=(6, 6))
 plt.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1], c=y_test)
 plt.colorbar()
 plt.show()
-print x_test_encoded[0][:]
+#print x_test_encoded[0][:]
 
 
 # display a 2D manifold of the digits
-n = 15  # figure with 15x15 digits
+n = 25  # figure with 15x15 digits
 digit_size = 28
 figure = np.zeros((digit_size * n, digit_size * n))
 # linearly spaced coordinates on the unit square were transformed through the inverse CDF (ppf) of the Gaussian
 # to produce values of the latent variables z, since the prior of the latent space is Gaussian
 
-grid_x = norm.ppf(np.linspace(0.05, 0.95, n))
-grid_y = norm.ppf(np.linspace(0.05, 0.95, n))
+grid_x = 4*norm.ppf(np.linspace(0.05, 0.95, n))
+grid_y = 4*norm.ppf(np.linspace(0.05, 0.95, n))
 
 #grid_x = norm.ppf(np.linspace(-10.0, 10.0, n))
 #grid_y = norm.ppf(np.linspace(-10.0, 10.0, n))
-
+print grid_x
+print grid_y
 for i, yi in enumerate(grid_x):
     for j, xi in enumerate(grid_y):
-        xi = input()
-        yi = input()
+        #xi = input()
+        #yi = input()
         z_sample = np.array([[xi, yi]])
-        print z_sample
+        #print z_sample
         x_decoded = generator.predict(z_sample)
         digit = x_decoded[0].reshape(digit_size, digit_size)
-        plt.figure(figsize=(10, 10))
-        plt.imshow(digit, cmap='Greys_r')
-        plt.show()
+        #plt.figure(figsize=(10, 10))
+        #plt.imshow(digit, cmap='Greys_r')
+        #plt.show()
         figure[i * digit_size: (i + 1) * digit_size,
                j * digit_size: (j + 1) * digit_size] = digit
 
