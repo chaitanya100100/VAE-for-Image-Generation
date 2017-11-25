@@ -61,11 +61,11 @@ plt.figure(figsize=(6, 6))
 plt.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1], c=y_test)
 plt.colorbar()
 plt.show()
-
+print x_test_encoded[0][:]
 
 
 # display a 2D manifold of the digits
-n = 25  # figure with 15x15 digits
+n = 15  # figure with 15x15 digits
 digit_size = 28
 figure = np.zeros((digit_size * n, digit_size * n))
 # linearly spaced coordinates on the unit square were transformed through the inverse CDF (ppf) of the Gaussian
