@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-
+import cPickle
 import keras
 from keras.layers import Input, Dense, Lambda, Layer
 from keras.models import Model
@@ -44,7 +44,14 @@ encoder = keras.models.load_model('../models/ld_%d_id_%d_e_%d_encoder.h5' % (lat
 generator = keras.models.load_model('../models/ld_%d_id_%d_e_%d_generator.h5' % (latent_dim, intermediate_dim, epochs),
     custom_objects={'latent_dim':latent_dim, 'epsilon_std':epsilon_std, 'CustomVariationalLayer':CustomVariationalLayer})
 
+fname = '../models/ld_%d_id_%d_e_%d_history.pkl' % (latent_dim, intermediate_dim, epochs)
 
+try:
+    with open(fname, 'rb') as fo:
+        history = cPickle.load(fo)
+    print history
+except:
+    print "training history not saved"
 
 # train the VAE on MNIST digits
 (x_train, y_train), (x_test, y_test) = mnist.load_data()

@@ -7,7 +7,7 @@ from keras.models import Model
 from keras import backend as K
 from keras import metrics
 from keras.datasets import mnist
-
+import cPickle
 # parameters
 from params import *
 
@@ -64,7 +64,7 @@ x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
 x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 
 
-vae.fit(x_train,
+history = vae.fit(x_train,
         shuffle=True,
         epochs=epochs,
         batch_size=batch_size,
@@ -83,6 +83,10 @@ generator = Model(decoder_input, _x_decoded_mean)
 vae.save('../models/ld_%d_id_%d_e_%d_vae.h5' % (latent_dim, intermediate_dim, epochs))
 encoder.save('../models/ld_%d_id_%d_e_%d_encoder.h5' % (latent_dim, intermediate_dim, epochs))
 generator.save('../models/ld_%d_id_%d_e_%d_generator.h5' % (latent_dim, intermediate_dim, epochs))
+fname = '../models/ld_%d_id_%d_e_%d_history.pkl' % (latent_dim, intermediate_dim, epochs)
+
+with open(fname, 'wb') as file_pi:
+    cPickle.dump(history.history, file_pi)
 
 """
 # display a 2D plot of the digit classes in the latent space
