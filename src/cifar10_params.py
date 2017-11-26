@@ -1,6 +1,6 @@
 img_rows, img_cols, img_chns = 32, 32, 3
 latent_dim = 2
-intermediate_dim = 128
+intermediate_dim = 16
 epsilon_std = 1.0
 epochs = 1
 filters = 32

@@ -17,13 +17,13 @@ S'<'
 NNNI-1
 I-1
 I0
-tbS'\xd2\x18\xadc\xdc\xb1\x85@'
+tbS'\xee\x94\x0e\xf6u\x10\x86@'
 tRp7
 asS'val_loss'
 p8
 (lp9
 g4
 (g6
-S'I\x9d\x80\xa6\xa4\xba\x85@'
+S'\x16jMs+\x11\x86@'
 tRp10
 as.

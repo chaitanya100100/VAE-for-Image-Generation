@@ -8,79 +8,80 @@ from keras.layers import Conv2D, Conv2DTranspose
 from keras.models import Model
 from keras import backend as K
 from keras import metrics
-from keras.datasets import cifar10
 
-from params_conv import *
+# import parameters
+from caltech101_92_params import *
 
+# tensorflow uses channels_last
+# theano uses channels_first
 if K.image_data_format() == 'channels_first':
     original_img_size = (img_chns, img_rows, img_cols)
 else:
     original_img_size = (img_rows, img_cols, img_chns)
 
+# encoder architecture
 x = Input(shape=original_img_size)
 conv_1 = Conv2D(img_chns,
-                kernel_size=(2, 2),
+                kernel_size=(3, 3),
+                strides=(1, 1),
                 padding='same', activation='relu')(x)
 conv_2 = Conv2D(filters,
-                kernel_size=(2, 2),
+                kernel_size=(3, 3),
                 padding='same', activation='relu',
                 strides=(2, 2))(conv_1)
 conv_3 = Conv2D(filters,
                 kernel_size=num_conv,
                 padding='same', activation='relu',
-                strides=1)(conv_2)
+                strides=(2, 2))(conv_2)
 conv_4 = Conv2D(filters,
                 kernel_size=num_conv,
                 padding='same', activation='relu',
-                strides=1)(conv_3)
+                strides=(2, 2))(conv_3)
 flat = Flatten()(conv_4)
 hidden = Dense(intermediate_dim, activation='relu')(flat)
 
+# mean and variance for latent variables
 z_mean = Dense(latent_dim)(hidden)
 z_log_var = Dense(latent_dim)(hidden)
 
-
+# sampling layer
 def sampling(args):
     z_mean, z_log_var = args
     epsilon = K.random_normal(shape=(K.shape(z_mean)[0], latent_dim),
                               mean=0., stddev=epsilon_std)
     return z_mean + K.exp(z_log_var) * epsilon
 
-# note that "output_shape" isn't necessary with the TensorFlow backend
-# so you could write `Lambda(sampling)([z_mean, z_log_var])`
 z = Lambda(sampling, output_shape=(latent_dim,))([z_mean, z_log_var])
 
+# decoder architecture
 # we instantiate these layers separately so as to reuse them later
 decoder_hid = Dense(intermediate_dim, activation='relu')
-decoder_upsample = Dense(filters * img_rows / 2 * img_cols / 2, activation='relu')
+decoder_upsample = Dense(12 * 12 * filters, activation='relu')
 
 if K.image_data_format() == 'channels_first':
-    output_shape = (batch_size, filters, img_rows / 2, img_cols / 2)
+    output_shape = (batch_size, filters, 12, 12)
 else:
-    output_shape = (batch_size, img_rows / 2, img_cols / 2, filters)
+    output_shape = (batch_size, 12, 12, filters)
 
 decoder_reshape = Reshape(output_shape[1:])
 decoder_deconv_1 = Conv2DTranspose(filters,
                                    kernel_size=num_conv,
                                    padding='same',
-                                   strides=1,
+                                   strides=(2, 2),
                                    activation='relu')
 decoder_deconv_2 = Conv2DTranspose(filters,
                                    kernel_size=num_conv,
                                    padding='same',
-                                   strides=1,
+                                   strides=(2, 2),
                                    activation='relu')
-if K.image_data_format() == 'channels_first':
-    output_shape = (batch_size, filters, img_rows + 1, img_cols + 1)
-else:
-    output_shape = (batch_size, img_rows + 1, img_cols + 1, filters)
 decoder_deconv_3_upsamp = Conv2DTranspose(filters,
                                           kernel_size=(3, 3),
                                           strides=(2, 2),
-                                          padding='valid',
+                                          padding='same',
                                           activation='relu')
 decoder_mean_squash = Conv2D(img_chns,
-                             kernel_size=2,
+                             kernel_size=(3, 3),
+                             strides=(1, 1),
                              padding='valid',
                              activation='sigmoid')
 
@@ -114,28 +115,27 @@ class CustomVariationalLayer(Layer):
         # We don't use this output.
         return x
 
-
 y = CustomVariationalLayer()([x, x_decoded_mean_squash])
+
+# entire model
 vae = Model(x, y)
 vae.compile(optimizer='rmsprop', loss=None)
 vae.summary()
 
-# train the VAE on CIFAR
-(x_train, _), (x_test, y_test) = cifar10.load_data()
+# load dataset
+with open('../datasets/101_ObjectCategories.pkl') as f:
+    dic = cPickle.load(f)
+    x_train = dic['all_images']
+print "dataset loaded"
 
-x_train = x_train.astype('float32') / 255.
-x_train = x_train.reshape((x_train.shape[0],) + original_img_size)
-x_test = x_test.astype('float32') / 255.
-x_test = x_test.reshape((x_test.shape[0],) + original_img_size)
-
-
+# training
 history = vae.fit(x_train,
         shuffle=True,
         epochs=epochs,
         batch_size=batch_size,
-        validation_data=(x_test, None))
+        )
 
-# build a model to project inputs on the latent space
+# encoder from learned model
 encoder = Model(x, z_mean)
 
 """
@@ -147,7 +147,7 @@ plt.colorbar()
 plt.show()
 """
 
-# build a digit generator that can sample from the learned distribution
+# build generator that can sample from the learned distribution
 decoder_input = Input(shape=(latent_dim,))
 _hid_decoded = decoder_hid(decoder_input)
 _up_decoded = decoder_upsample(_hid_decoded)
@@ -159,11 +159,13 @@ _x_decoded_mean_squash = decoder_mean_squash(_x_decoded_relu)
 generator = Model(decoder_input, _x_decoded_mean_squash)
 
 
-vae.save('../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_vae.h5' % (latent_dim, num_conv, intermediate_dim, epochs))
-encoder.save('../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_encoder.h5' % (latent_dim, num_conv, intermediate_dim, epochs))
-generator.save('../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_generator.h5' % (latent_dim, num_conv, intermediate_dim, epochs))
+# save all 3 models
+vae.save('../models/object101_ld_%d_conv_%d_id_%d_e_%d_vae.h5' % (latent_dim, num_conv, intermediate_dim, epochs))
+encoder.save('../models/object101_ld_%d_conv_%d_id_%d_e_%d_encoder.h5' % (latent_dim, num_conv, intermediate_dim, epochs))
+generator.save('../models/object101_ld_%d_conv_%d_id_%d_e_%d_generator.h5' % (latent_dim, num_conv, intermediate_dim, epochs))
 
-fname = '../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_history.pkl' % (latent_dim, num_conv, intermediate_dim, epochs)
+# save training history
+fname = '../models/object101_ld_%d_conv_%d_id_%d_e_%d_history.pkl' % (latent_dim, num_conv, intermediate_dim, epochs)
 with open(fname, 'wb') as file_pi:
     cPickle.dump(history.history, file_pi)
 

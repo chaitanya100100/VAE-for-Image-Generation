@@ -10,29 +10,38 @@ from keras import metrics
 from keras.datasets import cifar10
 import cPickle
 
-from params_conv import *
+# import parameters
+from caltech101_92_params import *
 
+"""
+loading vae model back is not a straight-forward task because of custom loss layer.
+we have to define some architecture back again to specify custom loss layer and hence to load model back again.
+"""
+
+# tensorflow or theano
 if K.image_data_format() == 'channels_first':
     original_img_size = (img_chns, img_rows, img_cols)
 else:
     original_img_size = (img_rows, img_cols, img_chns)
 
+# encoder architecture
 x = Input(shape=original_img_size)
 conv_1 = Conv2D(img_chns,
-                kernel_size=(2, 2),
+                kernel_size=(3, 3),
+                strides=(1, 1),
                 padding='same', activation='relu')(x)
 conv_2 = Conv2D(filters,
-                kernel_size=(2, 2),
+                kernel_size=(3, 3),
                 padding='same', activation='relu',
                 strides=(2, 2))(conv_1)
 conv_3 = Conv2D(filters,
                 kernel_size=num_conv,
                 padding='same', activation='relu',
-                strides=1)(conv_2)
+                strides=(2, 2))(conv_2)
 conv_4 = Conv2D(filters,
                 kernel_size=num_conv,
                 padding='same', activation='relu',
-                strides=1)(conv_3)
+                strides=(2, 2))(conv_3)
 flat = Flatten()(conv_4)
 hidden = Dense(intermediate_dim, activation='relu')(flat)
 
@@ -61,14 +70,16 @@ class CustomVariationalLayer(Layer):
         # We don't use this output.
         return x
 
-vae = keras.models.load_model('../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_vae.h5' % (latent_dim, num_conv, intermediate_dim, epochs),
+# load saved models
+vae = keras.models.load_model('../models/object101_ld_%d_conv_%d_id_%d_e_%d_vae.h5' % (latent_dim, num_conv, intermediate_dim, epochs),
     custom_objects={'latent_dim':latent_dim, 'epsilon_std':epsilon_std, 'CustomVariationalLayer':CustomVariationalLayer})
-encoder = keras.models.load_model('../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_encoder.h5' % (latent_dim, num_conv, intermediate_dim, epochs),
+encoder = keras.models.load_model('../models/object101_ld_%d_conv_%d_id_%d_e_%d_encoder.h5' % (latent_dim, num_conv, intermediate_dim, epochs),
     custom_objects={'latent_dim':latent_dim, 'epsilon_std':epsilon_std, 'CustomVariationalLayer':CustomVariationalLayer})
-generator = keras.models.load_model('../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_generator.h5' % (latent_dim, num_conv, intermediate_dim, epochs),
+generator = keras.models.load_model('../models/object101_ld_%d_conv_%d_id_%d_e_%d_generator.h5' % (latent_dim, num_conv, intermediate_dim, epochs),
     custom_objects={'latent_dim':latent_dim, 'epsilon_std':epsilon_std, 'CustomVariationalLayer':CustomVariationalLayer})
 
-fname = '../models/cifar10_ld_%d_conv_%d_id_%d_e_%d_history.pkl' % (latent_dim, num_conv, intermediate_dim, epochs)
+# load history if saved
+fname = '../models/object101_ld_%d_conv_%d_id_%d_e_%d_history.pkl' % (latent_dim, num_conv, intermediate_dim, epochs)
 try:
     with open(fname, 'rb') as fo:
         history = cPickle.load(fo)
@@ -76,14 +87,13 @@ try:
 except:
     print "training history not saved"
 
-# train the VAE on CIFAR
-(x_train, _), (x_test, y_test) = cifar10.load_data()
-
-x_train = x_train.astype('float32') / 255.
-x_train = x_train.reshape((x_train.shape[0],) + original_img_size)
-x_test = x_test.astype('float32') / 255.
-x_test = x_test.reshape((x_test.shape[0],) + original_img_size)
-
+"""
+with open('../datasets/101_ObjectCategories.pkl') as f:
+    dic = cPickle.load(f)
+    x_train = dic['all_images']
+print "dataset loaded"
+"""
+"""
 # display a 2D plot of the classes in the latent space
 x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
 plt.figure(figsize=(6, 6))
@@ -112,3 +122,21 @@ for i, yi in enumerate(grid_x):
 plt.figure(figsize=(10, 10))
 plt.imshow(figure, cmap='Greys_r')
 plt.show()
+"""
+
+# display images generated from randomly sampled latent vector
+# make a 2D manifold of generated images
+n = 5
+digit_size = 94
+figure = np.zeros((digit_size * n, digit_size * n, img_chns))
+
+for i in range(n):
+    for j in range(n):
+        z_sample = np.array([np.random.uniform(-1,1 ,size=latent_dim)])
+        x_decoded = generator.predict(z_sample)
+        digit = x_decoded[0].reshape(digit_size, digit_size, img_chns)
+        figure[i * digit_size: (i + 1) * digit_size,j * digit_size: (j + 1) * digit_size] = digit
+
+        plt.figure(figsize=(5, 5))
+        plt.imshow(digit, cmap='Greys_r')
+        plt.show()

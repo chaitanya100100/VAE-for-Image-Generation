@@ -11,8 +11,14 @@ from keras import metrics
 from keras.datasets import mnist
 
 # parameters
-from params import *
+from mnist_params import *
 
+"""
+loading vae model back is not a straight-forward task because of custom loss layer.
+we have to define some architecture back again to specify custom loss layer and hence to load model back again.
+"""
+
+# encoder architecture
 x = Input(shape=(original_dim,))
 encoder_h = Dense(intermediate_dim, activation='relu')(x)
 z_mean = Dense(latent_dim)(encoder_h)
@@ -37,7 +43,7 @@ class CustomVariationalLayer(Layer):
         # We won't actually use the output.
         return x
 
-
+# load saved models
 vae = keras.models.load_model('../models/ld_%d_id_%d_e_%d_vae.h5' % (latent_dim, intermediate_dim, epochs),
     custom_objects={'latent_dim':latent_dim, 'epsilon_std':epsilon_std, 'CustomVariationalLayer':CustomVariationalLayer})
 encoder = keras.models.load_model('../models/ld_%d_id_%d_e_%d_encoder.h5' % (latent_dim, intermediate_dim, epochs),
@@ -47,16 +53,15 @@ generator = keras.models.load_model('../models/ld_%d_id_%d_e_%d_generator.h5' % 
 
 
 
-# train the VAE on MNIST digits
+# load dataset
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
-
 x_train = x_train.astype('float32') / 255.
 x_test = x_test.astype('float32') / 255.
 x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
 x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 
 
-# display a 2D plot of the digit classes in the latent space
+# display a 2D or 3D plot of the digit classes in the latent space
 if latent_dim == 2 or latent_dim==3:
     if latent_dim == 2:
         x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
@@ -78,10 +83,9 @@ if latent_dim == 2 or latent_dim==3:
         #plt.colorbar()
         plt.show()
 
-#print x_test_encoded[0][:]
 
 
-# display a 2D manifold of the digits
+# display a 2D manifold of the images
 n = 25  # figure with 15x15 digits
 digit_size = 28
 figure = np.zeros((digit_size * n, digit_size * n))
