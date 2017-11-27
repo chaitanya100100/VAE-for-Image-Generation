@@ -126,7 +126,7 @@ plt.show()
 
 # display images generated from randomly sampled latent vector
 # make a 2D manifold of generated images
-n = 5
+n = 10
 digit_size = 94
 figure = np.zeros((digit_size * n, digit_size * n, img_chns))
 
@@ -137,6 +137,6 @@ for i in range(n):
         digit = x_decoded[0].reshape(digit_size, digit_size, img_chns)
         figure[i * digit_size: (i + 1) * digit_size,j * digit_size: (j + 1) * digit_size] = digit
 
-        plt.figure(figsize=(5, 5))
-        plt.imshow(digit, cmap='Greys_r')
-        plt.show()
+plt.figure(figsize=(20, 20))
+plt.imshow(figure, cmap='Greys_r')
+plt.show()

@@ -1,8 +1,8 @@
 img_rows, img_cols, img_chns = 128, 128, 3
-latent_dim = 128
-intermediate_dim = 128
+latent_dim = 64
+intermediate_dim = 256
 epsilon_std = 1.0
-epochs = 300
+epochs = 100
 filters = 64
 num_conv = 3
-batch_size = 32
+batch_size = 256

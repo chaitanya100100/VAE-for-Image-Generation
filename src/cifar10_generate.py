@@ -86,7 +86,6 @@ except:
     print "training history not saved"
 
 
-"""
 
 # load dataset to plot latent space
 (x_train, _), (x_test, y_test) = cifar10.load_data()
@@ -95,13 +94,23 @@ x_train = x_train.reshape((x_train.shape[0],) + original_img_size)
 x_test = x_test.astype('float32') / 255.
 x_test = x_test.reshape((x_test.shape[0],) + original_img_size)
 
-# display a 2D plot of the classes in the latent space
-x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
-plt.figure(figsize=(6, 6))
-plt.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1], c=y_test)
-plt.colorbar()
-plt.show()
+if latent_dim == 3:
+    x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
+    fig = plt.figure(figsize=(12,12))
+    ax = fig.add_subplot(111, projection='3d')
 
+    ax.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1],x_test_encoded[:, 2], c=y_test)
+    plt.show()
+
+if latent_dim == 2:
+    # display a 2D plot of the classes in the latent space
+    x_test_encoded = encoder.predict(x_test, batch_size=batch_size)
+    plt.figure(figsize=(6, 6))
+    plt.scatter(x_test_encoded[:, 0], x_test_encoded[:, 1], c=y_test)
+    plt.colorbar()
+    plt.show()
+
+"""
 # display a 2D manifold of the images
 n = 15  # figure with 15x15 images
 img_size = 32
@@ -136,6 +145,11 @@ for i in range(n):
         x_decoded = generator.predict(z_sample)
         img = x_decoded[0].reshape(img_size, img_size, img_chns)
         figure[i * img_size: (i + 1) * img_size,j * img_size: (j + 1) * img_size] = img
+
+        #plt.figure(figsize=(5, 5))
+        #plt.imshow(img, cmap='Greys_r')
+        #plt.show()
+
 
 plt.figure(figsize=(20, 20))
 plt.imshow(figure, cmap='Greys_r')

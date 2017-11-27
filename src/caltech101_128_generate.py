@@ -11,7 +11,7 @@ from keras.datasets import cifar10
 import cPickle
 
 # import parameters
-from caltech101_92_params import *
+from caltech101_128_params import *
 
 """
 loading vae model back is not a straight-forward task because of custom loss layer.
@@ -126,17 +126,17 @@ plt.show()
 
 # display images generated from randomly sampled latent vector
 # make a 2D manifold of generated images
-n = 5
-digit_size = 94
+n = 10
+digit_size = 128
 figure = np.zeros((digit_size * n, digit_size * n, img_chns))
 
 for i in range(n):
     for j in range(n):
-        z_sample = np.array([np.random.uniform(-1,1 ,size=latent_dim)])
+        z_sample = np.array([np.random.uniform(-1, 1,size=latent_dim)])
         x_decoded = generator.predict(z_sample)
         digit = x_decoded[0].reshape(digit_size, digit_size, img_chns)
         figure[i * digit_size: (i + 1) * digit_size,j * digit_size: (j + 1) * digit_size] = digit
 
-        plt.figure(figsize=(5, 5))
-        plt.imshow(digit, cmap='Greys_r')
-        plt.show()
+plt.figure(figsize=(20, 20))
+plt.imshow(figure, cmap='Greys_r')
+plt.show()

@@ -95,11 +95,11 @@ figure = np.zeros((digit_size * n, digit_size * n))
 
 for i in range(n):
     for j in range(n):
-        z_sample = np.array([np.random.uniform(-1,1 ,size=latent_dim)])
+        z_sample = np.array([np.random.uniform(-1.5, 1.5,size=latent_dim)])
         x_decoded = generator.predict(z_sample)
         digit = x_decoded[0].reshape(digit_size, digit_size)
         figure[i * digit_size: (i + 1) * digit_size,j * digit_size: (j + 1) * digit_size] = digit
 
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(20, 20))
 plt.imshow(figure, cmap='Greys_r')
 plt.show()
