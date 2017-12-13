@@ -57,6 +57,7 @@ y = CustomVariationalLayer()([x, x_decoded_mean])
 # entire vae model
 vae = Model(x, y)
 vae.compile(optimizer='rmsprop', loss=None)
+print vae.summary()
 
 # load mnist dataset and preprocess
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
