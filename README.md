@@ -43,7 +43,7 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 ##### 2D latent space
 | latent space | uniform sampling |
 | -- | -- |
-| ![2D](images/mnist_ld_2.png) | ![2D](images/ld_2_e_60_uniform.png) |
+| ![2D](images/mnist_ld_2_e_60_latent_space.png) | ![2D](images/ld_2_e_60_uniform.png) |
 ##### 3D latent space
 ![3D](images/mnist_ld_3.png)
 ##### 3D latent space results
@@ -68,12 +68,18 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 ##### ![src/cifar10_train.py](src/cifar10_train.py) , ![src/cifar10_generate.py](src/cifar10_generate.py)
 same as mnist files
 
-##### randomly sampled 3D latent space
-![3D](images/ld_3_e_60_uniform.gif)  
-cifar10_ld_16_e_600_random2.png
+#### result - latent dimensions 16
+- increasing training epochs gives better results
+| 25 epochs | 50 epochs | 75 epochs |
+| -- | -- | -- |
+| ![cifar10](images/cifar10_ld_16_e_25_random.png) | ![cifar10](images/cifar10_ld_16_e_50_random.png) | ![cifar10](images/cifar10_ld_16_e_75_random.png) |
+
+- 600 epochs
+![cifar10](images/cifar10_ld_16_e_600_random2.png)  
 
 ### CALTECH101
 
 - `caltech101_<sz>_train.py` and `caltech101_<sz>_generate.py` (where `sz` is the size of input image - here the training was done for two sizes - 92*92 and 128*128) are same as cifar10 dataset files
 - as the image size is large, more computation power is needed to train the model
+- results obtained with less training are qualitatively not good
 - in `dataset` directory, ![src/caltech101_preprocess.py](src/caltech101_preprocess.py) is provided to preprocess the dataset
