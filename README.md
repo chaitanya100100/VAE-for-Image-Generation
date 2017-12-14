@@ -33,10 +33,15 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 ##### ![src/mnist_3d_latent_space_and_generate.py](src/mnist_3d_latent_space_and_generate.py)
 - it is same as `mnist_2d_latent_space_and_generate.py` but it is for 3d latent space
 
-##### ![mnist_general_latent_space_and_generate.py](src/mnist_general_latent_space_and_generate.py)
+##### ![src/mnist_general_latent_space_and_generate.py](src/mnist_general_latent_space_and_generate.py)
 - it loads trained model according to the hyperparameters defined in `mnist_params.py`
 - if latent space is either 2D or 3D, it displays it
 - it displays a grid of images generated from randomly sampled latent vectors
+
+#### results
+| 1  | 2 | 3 |
+| ------------- | ------------- | ------------- |
+| ![1](images/1.gif) | ![2](images/2.gif) | ![3](images/3.gif) |
 
 
 ### CIFAR10
