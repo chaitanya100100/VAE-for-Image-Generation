@@ -73,8 +73,9 @@ same as mnist files
 | -- | -- | -- |
 | ![cifar10](images/cifar10_ld_16_e_25_random.png) | ![cifar10](images/cifar10_ld_16_e_50_random.png) | ![cifar10](images/cifar10_ld_16_e_75_random.png) |
 
-- 600 epochs  
-![cifar10](images/cifar10_ld_16_e_600_random2.png)  
+| 600 epochs |
+| -- |
+| ![cifar10](images/cifar10_ld_16_e_600_random2.png) |
 
 ### CALTECH101
 
