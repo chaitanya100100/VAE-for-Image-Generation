@@ -45,9 +45,10 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 | -- | -- |
 | ![2D](images/mnist_ld_2.png) | ![2D](images/ld_2_e_60_uniform.png) |
 ##### 3D latent space
-| latent space | uniform sampling | random sampling |
-| -- | -- | -- |
-| ![3D](images/mnist_ld_3.png) | ![3D](images/ld_3_e_60_uniform.gif) | ![3D](images/ld_3_e_60_random2.png) |
+![3D](images/mnist_ld_3.png) 
+| uniform sampling | random sampling |
+| -- | -- |
+| ![3D](images/ld_3_e_60_uniform.gif) | ![3D](images/ld_3_e_60_random2.png) |
 
 
 - more results are in ![images](images/) directory
