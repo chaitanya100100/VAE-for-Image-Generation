@@ -39,10 +39,18 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 - it displays a grid of images generated from randomly sampled latent vectors
 
 #### results
-##### uniformly sampled 2D latent space
-![2D](images/ld_2_e_60_uniform.png)
-##### uniformly sampled 3D latent space
-![2D](images/ld_3_e_60_uniform.png)
+
+##### 2D latent space
+| latent space | uniform sampling |
+| -- | -- |
+| ![2D](images/mnist_ld_2.png) | ![2D](images/ld_2_e_60_uniform.png) |
+##### 3D latent space
+| latent space | uniform sampling | random sampling |
+| -- | -- | -- |
+| ![3D](images/mnist_ld_3.png) | ![3D](images/ld_3_e_60_uniform.gif) | ![3D](images/ld_3_e_60_random2.png) |
+
+
+- more results are in ![images](images/) directory
 
 
 ### CIFAR10
@@ -57,6 +65,10 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 
 ##### ![src/cifar10_train.py](src/cifar10_train.py) , ![src/cifar10_generate.py](src/cifar10_generate.py)
 same as mnist files
+
+##### randomly sampled 3D latent space
+![3D](images/ld_3_e_60_uniform.gif)  
+cifar10_ld_16_e_600_random2.png
 
 ### CALTECH101
 
