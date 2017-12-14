@@ -7,7 +7,7 @@ Variational AutoEncoder - Keras implementation on mnist and cifar10 datasets
 - numpy, matplotlib, scipy
 
 ## implementation Details
-code is highly inspired from keras examples of vae : ![vae](https://github.com/keras-team/keras/blob/master/examples/variational_autoencoder.py)
+code is highly inspired from keras examples of vae : ![vae](https://github.com/keras-team/keras/blob/master/examples/variational_autoencoder.py),
 ![vae_deconv](https://github.com/keras-team/keras/blob/master/examples/variational_autoencoder_deconv.py)  
 (_source files contains some code duplication_)
 
@@ -39,9 +39,9 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 - it displays a grid of images generated from randomly sampled latent vectors
 
 #### results
-| 1  | 2 | 3 |
-| ------------- | ------------- | ------------- |
-| ![1](images/1.gif) | ![2](images/2.gif) | ![3](images/3.gif) |
+| 1  | 2 |
+| ------------- | ------------- |
+| ![1](images/1.gif) | ![2](images/2.gif) |
 
 
 ### CIFAR10
