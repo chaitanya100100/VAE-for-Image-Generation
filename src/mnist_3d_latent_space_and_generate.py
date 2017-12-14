@@ -76,15 +76,15 @@ plt.show()
 
 
 # display a 2D manifold of the digits
-n = 15  # figure with 15x15 digits
+n = 25  # figure with 15x15 digits
 digit_size = 28
 figure = np.zeros((digit_size * n, digit_size * n))
 
 # linearly spaced coordinates on the unit square were transformed through the inverse CDF (ppf) of the Gaussian
 # to produce values of the latent variables z, since the prior of the latent space is Gaussian
-grid_x = 3*norm.ppf(np.linspace(0.05, 0.95, n))
-grid_y = 3*norm.ppf(np.linspace(0.05, 0.95, n))
-grid_z = 3*norm.ppf(np.linspace(0.05, 0.95, n))
+grid_x = 1.5*norm.ppf(np.linspace(0.05, 0.95, n))
+grid_y = 1.5*norm.ppf(np.linspace(0.05, 0.95, n))
+grid_z = 1.5*norm.ppf(np.linspace(0.05, 0.95, n))
 
 #grid_x = norm.ppf(np.linspace(-10.0, 10.0, n))
 #grid_y = norm.ppf(np.linspace(-10.0, 10.0, n))

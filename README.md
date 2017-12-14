@@ -39,9 +39,10 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 - it displays a grid of images generated from randomly sampled latent vectors
 
 #### results
-| 1  | 2 |
-| ------------- | ------------- |
-| ![2](images/2.gif) | ![3](images/3.gif) |
+##### uniformly sampled 2D latent space
+![2D](images/ld_2_e_60_uniform.png)
+##### uniformly sampled 3D latent space
+![2D](images/ld_3_e_60_uniform.png)
 
 
 ### CIFAR10
