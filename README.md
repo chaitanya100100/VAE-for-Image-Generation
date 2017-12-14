@@ -15,8 +15,10 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 
 - images are flatten out to treat them as 1D vectors
 - encoder and decoder - both have normal neural network architecture
-- network architecture is as follows  
-![mnist_vae_architecture](images/mnist_architecture.png)
+
+| network architecture |
+| -- |
+| ![mnist_vae_architecture](images/mnist_architecture.png) |
 
 ##### ![src/mnist_train.py](src/mnist_train.py)
 - it trains vae model according to the hyperparameters defined in ![src/mnist_params.py](src/mnist_params.py)
@@ -60,13 +62,17 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 - images are treated as 2D input
 - encoder has the architecture of convolutional neural network and decoder has the architecture of deconvolutional network
 - network architecture for encoder and decoder are as follows  
-##### encoder
-![cifar10_vae_encoder](images/cifar10_encoder.png)
-##### dencoder
-![cifar10_vae_decoder](images/cifar10_decoder.png)
+  
+| encoder |
+| -- |
+| ![cifar10_vae_encoder](images/cifar10_encoder.png) |  
+
+| decoder |
+| -- |
+| ![cifar10_vae_decoder](images/cifar10_decoder.png) |
 
 ##### ![src/cifar10_train.py](src/cifar10_train.py) , ![src/cifar10_generate.py](src/cifar10_generate.py)
-same as mnist files
+implementation structure is same as mnist files
 
 #### result - latent dimensions 16
 | 25 epochs | 50 epochs | 75 epochs |
