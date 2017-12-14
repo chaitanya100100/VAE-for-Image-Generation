@@ -69,7 +69,6 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 same as mnist files
 
 #### result - latent dimensions 16
-- increasing training epochs gives better results
 | 25 epochs | 50 epochs | 75 epochs |
 | -- | -- | -- |
 | ![cifar10](images/cifar10_ld_16_e_25_random.png) | ![cifar10](images/cifar10_ld_16_e_50_random.png) | ![cifar10](images/cifar10_ld_16_e_75_random.png) |
