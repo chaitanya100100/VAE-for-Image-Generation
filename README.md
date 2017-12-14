@@ -85,7 +85,7 @@ implementation structure is same as mnist files
 
 ### CALTECH101
 
-- `caltech101_<sz>_train.py` and `caltech101_<sz>_generate.py` (where `sz` is the size of input image - here the training was done for two sizes - 92*92 and 128*128) are same as cifar10 dataset files
+- `caltech101_<sz>_train.py` and `caltech101_<sz>_generate.py` (where `sz` is the size of input image - here the training was done for two sizes - 92\*92 and 128\*128) are same as cifar10 dataset files
 - as the image size is large, more computation power is needed to train the model
 - results obtained with less training are qualitatively not good
 - in `dataset` directory, ![src/caltech101_preprocess.py](src/caltech101_preprocess.py) is provided to preprocess the dataset
