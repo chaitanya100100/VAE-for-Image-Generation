@@ -41,7 +41,7 @@ code is highly inspired from keras examples of vae : ![vae](https://github.com/k
 #### results
 | 1  | 2 |
 | ------------- | ------------- |
-| ![1](images/1.gif) | ![3](images/3.gif) |
+| ![2](images/2.gif) | ![3](images/3.gif) |
 
 
 ### CIFAR10
